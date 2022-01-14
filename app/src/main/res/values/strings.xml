@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">BlogPostApp</string>
+    <string name="title">Title</string>
+    <string name="title_post">Title Post</string>
+    <string name="content">Content</string>
+    <string name="content_post">Content Post</string>
+    <string name="create">Create</string>
+
+    <!-- Create Post Dialog-->
+    <string name="error_empty_input_title_message">Title must be filled.</string>
+    <string name="error_empty_input_content_message">Content must be filled.</string>
 </resources>
