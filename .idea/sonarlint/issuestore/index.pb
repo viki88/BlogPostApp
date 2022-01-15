@@ -1,6 +1,4 @@
 
-ê
-`app/src/main/java/com/vikination/blogpostapp/presentation/ui/newpost/CreatePostDialogFragment.kt,0/d/0d34f2f2931205aa3acf9efd1ece043743d51d46
 p
 @app/src/main/java/com/vikination/blogpostapp/data/models/Post.kt,a/4/a4f9edd30d7c2140b7b912ac98db3d231b36f933
 s

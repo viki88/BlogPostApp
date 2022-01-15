@@ -6,9 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.vikination.blogpostapp.R
+import com.vikination.blogpostapp.data.models.RequestPostBody
 import com.vikination.blogpostapp.databinding.LayoutNewPostBinding
 
-class CreatePostDialogFragment :DialogFragment(){
+class CreatePostDialogFragment(var onFinishCreatePostListener: OnFinishCreatePostListener) :DialogFragment(){
 
     private lateinit var binding : LayoutNewPostBinding
 
@@ -29,7 +30,17 @@ class CreatePostDialogFragment :DialogFragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnPost.setOnClickListener { if (isValidInput()) dismiss() }
+        binding.btnPost.setOnClickListener {
+            if (isValidInput()) {
+                val requestPostBody =
+                    RequestPostBody(
+                        binding.inputTitlePost.text.toString(),
+                        binding.inputContentPost.text.toString()
+                    )
+                onFinishCreatePostListener.onFinishCreatePost(requestPostBody)
+                dismiss()
+            }
+        }
     }
 
     private fun isValidInput() :Boolean{
@@ -48,5 +59,9 @@ class CreatePostDialogFragment :DialogFragment(){
 
             else -> true
         }
+    }
+
+    interface OnFinishCreatePostListener{
+        fun onFinishCreatePost(body :RequestPostBody)
     }
 }

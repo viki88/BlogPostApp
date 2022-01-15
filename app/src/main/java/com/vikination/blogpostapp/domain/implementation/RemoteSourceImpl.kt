@@ -3,14 +3,11 @@ package com.vikination.blogpostapp.domain.implementation
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.vikination.blogpostapp.data.models.DeletePostBody
+import com.vikination.blogpostapp.data.models.RequestPostBody
 import com.vikination.blogpostapp.data.models.Post
 import com.vikination.blogpostapp.data.service.ApiService
 import com.vikination.blogpostapp.data.source.RemoteSource
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,7 +31,7 @@ class RemoteSourceImpl @Inject constructor(var apiService: ApiService) :RemoteSo
         return postLiveData
     }
 
-    override fun deletePost(body: DeletePostBody, id :Int): LiveData<Post> {
+    override fun deletePost(body: RequestPostBody, id :Int): LiveData<Post> {
         val deletePostData = MutableLiveData<Post>()
         apiService.deletePost(body, id).enqueue(object :Callback<Post>{
             override fun onResponse(call: Call<Post>, response: Response<Post>) {
@@ -47,6 +44,20 @@ class RemoteSourceImpl @Inject constructor(var apiService: ApiService) :RemoteSo
 
         })
         return deletePostData
+    }
+
+    override fun createPost(body: RequestPostBody): LiveData<Post> {
+        val createPostLiveData = MutableLiveData<Post>()
+        apiService.createPost(body).enqueue(object :Callback<Post>{
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+                createPostLiveData.postValue(response.body())
+            }
+
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+                Log.e("TAG", "onFailure: ${t.message}" )
+            }
+        })
+        return createPostLiveData
     }
 
 }
