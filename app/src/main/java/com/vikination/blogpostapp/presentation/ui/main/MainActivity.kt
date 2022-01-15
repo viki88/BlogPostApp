@@ -3,17 +3,22 @@ package com.vikination.blogpostapp.presentation.ui.main
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
+import com.vikination.blogpostapp.data.models.DeletePostBody
+import com.vikination.blogpostapp.data.models.Post
 import com.vikination.blogpostapp.databinding.ActivityMainBinding
 import com.vikination.blogpostapp.presentation.ui.adapter.ListPostAdapter
+import com.vikination.blogpostapp.presentation.ui.listener.OnClickMenuListListener
 import com.vikination.blogpostapp.presentation.ui.newpost.CreatePostDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnClickMenuListListener {
 
     private lateinit var binding :ActivityMainBinding
     private lateinit var createPostDialog :CreatePostDialogFragment
@@ -47,8 +52,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun deletePost(post: Post){
+        showLoadingBar(true)
+        val body = DeletePostBody(post.title, post.content)
+        viewModel.deletePost(body, post.id).observe(this){
+            Toast.makeText(this@MainActivity, "Delete Post Success", Toast.LENGTH_SHORT).show()
+            showLoadingBar(false)
+            loadAllPost()
+        }
+    }
+
     private fun setupList(){
-        adapter = ListPostAdapter()
+        adapter = ListPostAdapter(this)
         binding.rvListpost.adapter = adapter
         binding.rvListpost.layoutManager = LinearLayoutManager(this)
     }
@@ -60,4 +75,25 @@ class MainActivity : AppCompatActivity() {
     private fun showLoadingBar(show :Boolean){
         binding.swipeLayout.isRefreshing = show
     }
+
+    override fun onEditClicked(post: Post) {
+        Toast.makeText(this, "edit ${post.title}", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDeleteClicked(post: Post) {
+        showDeleteDialog(post)
+    }
+
+    private fun showDeleteDialog(post: Post){
+        AlertDialog.Builder(this)
+            .setTitle("Delete Post")
+            .setMessage("Delete \"${post.title}\" post?")
+            .setPositiveButton("Delete"){ dialog,_ ->
+                dialog.dismiss()
+                deletePost(post)
+            }
+            .setNegativeButton("Cancel"){dialog, _ -> dialog.dismiss()}
+            .create().show()
+    }
+
 }

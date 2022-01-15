@@ -15,30 +15,65 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="4dp">
-        <LinearLayout
-            android:layout_margin="16dp"
+        
+        <com.chauthai.swipereveallayout.SwipeRevealLayout
+            android:id="@+id/layout_swipe_reveal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/title_post"
-                android:layout_width="match_parent"
+            android:layout_height="85dp"
+            app:mode="same_level"
+            app:dragEdge="right">
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Title"
-                android:textStyle="bold"
-                android:textSize="12sp"/>
+                android:orientation="horizontal">
+                <FrameLayout
+                    android:id="@+id/edit_layout"
+                    android:layout_width="85dp"
+                    android:layout_height="85dp"
+                    android:background="@color/yellow">
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_edit_white"
+                        android:layout_gravity="center"/>
+                </FrameLayout>
+                <FrameLayout
+                    android:id="@+id/delete_layout"
+                    android:layout_width="85dp"
+                    android:layout_height="85dp"
+                    android:background="@color/red">
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_delete_white"
+                        android:layout_gravity="center"/>
+                </FrameLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:padding="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/title_post"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="Title"
+                    android:textStyle="bold"
+                    android:textSize="12sp"/>
 
-            <TextView
-                android:id="@+id/content_post"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="Title fhdjskaf sjkahj hjdksah hjdkshajk jkhjska hjdkshajhjdkshajk hjdksah jks ahjk  djksahjk hjksa jkdshjka j k khjk skajk h jaskhjkhjskah jdksak hdjkshajkhjkjkhjkhjka hdjksa hdjksajdk shajk jdhsadjk jkdsjkahjhdjka jdskha"
-                android:textSize="12sp"
-                android:layout_marginTop="4dp"
-                android:lines="3"
-                android:ellipsize="end"
-                />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/content_post"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="Title fhdjskaf sjkahj hjdksah hjdkshajk jkhjska hjdkshajhjdkshajk hjdksah jks ahjk  djksahjk hjksa jkdshjka j k khjk skajk h jaskhjkhjskah jdksak hdjkshajkhjkjkhjkhjka hdjksa hdjksajdk shajk jdhsadjk jkdsjkahjhdjka jdskha"
+                    android:textSize="12sp"
+                    android:layout_marginTop="4dp"
+                    android:lines="2"
+                    android:ellipsize="end"
+                    />
+            </LinearLayout>
+        </com.chauthai.swipereveallayout.SwipeRevealLayout>
 
     </androidx.cardview.widget.CardView>
 

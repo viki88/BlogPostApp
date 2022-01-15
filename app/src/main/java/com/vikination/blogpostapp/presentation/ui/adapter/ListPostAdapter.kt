@@ -8,15 +8,30 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.vikination.blogpostapp.data.models.Post
 import com.vikination.blogpostapp.databinding.ItemLayoutListPostBinding
+import com.vikination.blogpostapp.presentation.ui.listener.OnClickMenuListListener
 import com.vikination.blogpostapp.utils.Utils
 
-class ListPostAdapter : ListAdapter<Post, ListPostAdapter.PostItemViewHolder>(PostDiffUtils()){
+class ListPostAdapter(var onClickMenuListListener: OnClickMenuListListener) : ListAdapter<Post, ListPostAdapter.PostItemViewHolder>(PostDiffUtils()){
 
     inner class PostItemViewHolder(var binding :ItemLayoutListPostBinding) :RecyclerView.ViewHolder(binding.root){
 
         fun bind(post: Post){
             binding.titlePost.text = post.title
             Utils.getStringFromHtml(binding.contentPost, post.content)
+
+            binding.editLayout.setOnClickListener {
+                closeItemMenu()
+                onClickMenuListListener.onEditClicked(post)
+            }
+
+            binding.deleteLayout.setOnClickListener {
+                closeItemMenu()
+                onClickMenuListListener.onDeleteClicked(post)
+            }
+        }
+
+        private fun closeItemMenu(){
+            binding.layoutSwipeReveal.close(true)
         }
     }
 

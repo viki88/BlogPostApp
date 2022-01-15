@@ -3,6 +3,7 @@ package com.vikination.blogpostapp.domain.implementation
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.vikination.blogpostapp.data.models.DeletePostBody
 import com.vikination.blogpostapp.data.models.Post
 import com.vikination.blogpostapp.data.service.ApiService
 import com.vikination.blogpostapp.data.source.RemoteSource
@@ -31,6 +32,21 @@ class RemoteSourceImpl @Inject constructor(var apiService: ApiService) :RemoteSo
 
         })
         return postLiveData
+    }
+
+    override fun deletePost(body: DeletePostBody, id :Int): LiveData<Post> {
+        val deletePostData = MutableLiveData<Post>()
+        apiService.deletePost(body, id).enqueue(object :Callback<Post>{
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+                deletePostData.postValue(response.body())
+            }
+
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+                Log.e("TAG", "onFailure: ${t.message}" )
+            }
+
+        })
+        return deletePostData
     }
 
 }
