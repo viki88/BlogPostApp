@@ -16,4 +16,10 @@ interface ApiService {
     @POST("/posts")
     fun createPost(@Body requestPostBody: RequestPostBody) :Call<Post>
 
+    @PUT("/posts/{id}")
+    fun updatePost(@Body body: RequestPostBody, @Path("id") id :Int) :Call<Post>
+
+    @GET("/posts/{id}")
+    fun getPost(@Path("id") id :Int) :Call<Post>
+
 }

@@ -13,16 +13,16 @@ import com.vikination.blogpostapp.data.models.Post
 import com.vikination.blogpostapp.databinding.ActivityMainBinding
 import com.vikination.blogpostapp.presentation.ui.adapter.ListPostAdapter
 import com.vikination.blogpostapp.presentation.ui.listener.OnClickMenuListListener
-import com.vikination.blogpostapp.presentation.ui.newpost.CreatePostDialogFragment
+import com.vikination.blogpostapp.presentation.ui.newpost.CreateEditPostDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
     OnClickMenuListListener,
-    CreatePostDialogFragment.OnFinishCreatePostListener {
+    CreateEditPostDialogFragment.OnFinishCreatePostListener {
 
     private lateinit var binding :ActivityMainBinding
-    private lateinit var createPostDialog :CreatePostDialogFragment
+    private lateinit var createEditPostDialog :CreateEditPostDialogFragment
     private val viewModel by viewModels<MainViewModel>()
     private lateinit var adapter :ListPostAdapter
 
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(),
         setContentView(binding.root)
 
         setupList()
-        createPostDialog = CreatePostDialogFragment(this)
+        createEditPostDialog = CreateEditPostDialogFragment(this)
 
         binding.btnAddpost.setOnClickListener { showCreatePostDialog() }
 
@@ -70,7 +70,16 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun showCreatePostDialog(){
-        createPostDialog.show(supportFragmentManager, "Create Post")
+        createEditPostDialog = CreateEditPostDialogFragment(this)
+        createEditPostDialog.show(supportFragmentManager, "Create Post")
+    }
+
+    private fun showEditPostDialog(post: Post){
+        val bundle = Bundle()
+        bundle.putParcelable(CreateEditPostDialogFragment.POST_DATA, post)
+        createEditPostDialog = CreateEditPostDialogFragment(this, true)
+        createEditPostDialog.arguments = bundle
+        createEditPostDialog.show(supportFragmentManager, "Edit Post")
     }
 
     private fun showLoadingBar(show :Boolean){
@@ -78,7 +87,8 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onEditClicked(post: Post) {
-        Toast.makeText(this, "edit ${post.title}", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "edit ${post.title}", Toast.LENGTH_SHORT).show()
+        showEditPostDialog(post)
     }
 
     override fun onDeleteClicked(post: Post) {
@@ -101,10 +111,22 @@ class MainActivity : AppCompatActivity(),
         createNewPost(body)
     }
 
+    override fun onFinishEditPost(body: RequestPostBody, id: Int) {
+        editPost(body, id)
+    }
+
     private fun createNewPost(requestPostBody: RequestPostBody){
         showLoadingBar(true)
         viewModel.createPost(requestPostBody).observe(this){
             Toast.makeText(this@MainActivity, "Create \"${it.title}\" Success", Toast.LENGTH_SHORT).show()
+            loadAllPost()
+        }
+    }
+
+    private fun editPost(requestPostBody: RequestPostBody, id: Int){
+        showLoadingBar(true)
+        viewModel.updatePost(requestPostBody, id).observe(this){
+            Toast.makeText(this@MainActivity, "Update \"${it.title}\" Success", Toast.LENGTH_SHORT).show()
             loadAllPost()
         }
     }

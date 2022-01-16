@@ -60,4 +60,33 @@ class RemoteSourceImpl @Inject constructor(var apiService: ApiService) :RemoteSo
         return createPostLiveData
     }
 
+    override fun updatePost(body: RequestPostBody, id: Int): LiveData<Post> {
+        val updatePostLiveData = MutableLiveData<Post>()
+        apiService.updatePost(body, id).enqueue(object :Callback<Post>{
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+                updatePostLiveData.postValue(response.body())
+            }
+
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+                Log.e("TAG", "onFailure: ${t.message}" )
+            }
+        })
+        return updatePostLiveData
+    }
+
+    override fun getPost(id: Int): LiveData<Post> {
+        val getPostLiveData = MutableLiveData<Post>()
+        apiService.getPost(id).enqueue(object :Callback<Post>{
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+                getPostLiveData.postValue(response.body())
+            }
+
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+                Log.e("TAG", "onFailure: ${t.message}" )
+            }
+        })
+        return getPostLiveData
+    }
+
+
 }

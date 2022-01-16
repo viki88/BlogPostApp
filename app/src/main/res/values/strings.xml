@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BlogPostApp</string>
+    <string name="app_name">Blog Posting App</string>
     <string name="title">Title</string>
     <string name="title_post">Title Post</string>
     <string name="content">Content</string>

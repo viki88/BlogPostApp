@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.vikination.blogpostapp.R
+import com.vikination.blogpostapp.data.models.Post
 import com.vikination.blogpostapp.data.models.RequestPostBody
 import com.vikination.blogpostapp.databinding.LayoutNewPostBinding
+import retrofit2.http.POST
 
-class CreatePostDialogFragment(var onFinishCreatePostListener: OnFinishCreatePostListener) :DialogFragment(){
+class CreateEditPostDialogFragment(var onFinishCreatePostListener: OnFinishCreatePostListener, var isEdit :Boolean = false) :DialogFragment(){
 
     private lateinit var binding : LayoutNewPostBinding
 
@@ -30,6 +32,12 @@ class CreatePostDialogFragment(var onFinishCreatePostListener: OnFinishCreatePos
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val postData = arguments?.getParcelable(POST_DATA) as Post?
+
+        binding.btnPost.text = if (isEdit) "Update" else "Create"
+        binding.inputTitlePost.setText(if (isEdit) postData?.title?:"" else "")
+        binding.inputContentPost.setText(if (isEdit) postData?.content?:"" else "")
+
         binding.btnPost.setOnClickListener {
             if (isValidInput()) {
                 val requestPostBody =
@@ -37,7 +45,8 @@ class CreatePostDialogFragment(var onFinishCreatePostListener: OnFinishCreatePos
                         binding.inputTitlePost.text.toString(),
                         binding.inputContentPost.text.toString()
                     )
-                onFinishCreatePostListener.onFinishCreatePost(requestPostBody)
+                if (isEdit) onFinishCreatePostListener.onFinishEditPost(requestPostBody, postData?.id?:0)
+                else onFinishCreatePostListener.onFinishCreatePost(requestPostBody)
                 dismiss()
             }
         }
@@ -63,5 +72,10 @@ class CreatePostDialogFragment(var onFinishCreatePostListener: OnFinishCreatePos
 
     interface OnFinishCreatePostListener{
         fun onFinishCreatePost(body :RequestPostBody)
+        fun onFinishEditPost(body: RequestPostBody, id:Int)
+    }
+
+    companion object{
+        const val POST_DATA = "post_data"
     }
 }

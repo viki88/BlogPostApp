@@ -17,4 +17,6 @@ class MainViewModel @Inject constructor(var mainRepository: MainRepository) :Vie
 
     fun createPost(body: RequestPostBody) = mainRepository.createPost(body)
 
+    fun updatePost(body: RequestPostBody, id: Int) = mainRepository.updatePost(body, id)
+
 }
