@@ -1,10 +1,9 @@
 package com.vikination.blogpostapp.domain.implementation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.vikination.blogpostapp.data.models.RequestPostBody
 import com.vikination.blogpostapp.data.models.Post
+import com.vikination.blogpostapp.data.models.RequestPostBody
 import com.vikination.blogpostapp.data.service.ApiService
 import com.vikination.blogpostapp.data.source.RemoteSource
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -16,6 +15,8 @@ import javax.inject.Inject
 @DelicateCoroutinesApi
 class RemoteSourceImpl @Inject constructor(var apiService: ApiService) :RemoteSource{
 
+    private var errorResponseLiveData = MutableLiveData<String>()
+
     override fun getAllPosts(): LiveData<List<Post>> {
         val postLiveData = MutableLiveData<List<Post>>()
         apiService.getAllPosts().enqueue(object :Callback<List<Post>>{
@@ -23,9 +24,8 @@ class RemoteSourceImpl @Inject constructor(var apiService: ApiService) :RemoteSo
                 postLiveData.postValue(response.body())
             }
 
-            override fun onFailure(call: Call<List<Post>>, t: Throwable) {
-                Log.e("TAG", "onFailure: ${t.message}" )
-            }
+            override fun onFailure(call: Call<List<Post>>, t: Throwable) =
+                errorResponseLiveData.postValue(t.message)
 
         })
         return postLiveData
@@ -38,9 +38,8 @@ class RemoteSourceImpl @Inject constructor(var apiService: ApiService) :RemoteSo
                 deletePostData.postValue(response.body())
             }
 
-            override fun onFailure(call: Call<Post>, t: Throwable) {
-                Log.e("TAG", "onFailure: ${t.message}" )
-            }
+            override fun onFailure(call: Call<Post>, t: Throwable) =
+                errorResponseLiveData.postValue(t.message)
 
         })
         return deletePostData
@@ -53,9 +52,8 @@ class RemoteSourceImpl @Inject constructor(var apiService: ApiService) :RemoteSo
                 createPostLiveData.postValue(response.body())
             }
 
-            override fun onFailure(call: Call<Post>, t: Throwable) {
-                Log.e("TAG", "onFailure: ${t.message}" )
-            }
+            override fun onFailure(call: Call<Post>, t: Throwable) =
+                errorResponseLiveData.postValue(t.message)
         })
         return createPostLiveData
     }
@@ -67,9 +65,8 @@ class RemoteSourceImpl @Inject constructor(var apiService: ApiService) :RemoteSo
                 updatePostLiveData.postValue(response.body())
             }
 
-            override fun onFailure(call: Call<Post>, t: Throwable) {
-                Log.e("TAG", "onFailure: ${t.message}" )
-            }
+            override fun onFailure(call: Call<Post>, t: Throwable) =
+                errorResponseLiveData.postValue(t.message)
         })
         return updatePostLiveData
     }
@@ -81,12 +78,13 @@ class RemoteSourceImpl @Inject constructor(var apiService: ApiService) :RemoteSo
                 getPostLiveData.postValue(response.body())
             }
 
-            override fun onFailure(call: Call<Post>, t: Throwable) {
-                Log.e("TAG", "onFailure: ${t.message}" )
-            }
+            override fun onFailure(call: Call<Post>, t: Throwable) =
+                errorResponseLiveData.postValue(t.message)
         })
         return getPostLiveData
     }
+
+    override fun errorResponse(): LiveData<String> = errorResponseLiveData
 
 
 }

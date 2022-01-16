@@ -13,5 +13,6 @@ class MainRepositoryImpl(var remoteSource: RemoteSource) : MainRepository {
     override fun createPost(body: RequestPostBody): LiveData<Post> = remoteSource.createPost(body)
     override fun updatePost(body: RequestPostBody, id: Int): LiveData<Post> = remoteSource.updatePost(body, id)
     override fun getPost(id: Int): LiveData<Post> = remoteSource.getPost(id)
+    override fun errorResponse(): LiveData<String> = remoteSource.errorResponse()
 
 }

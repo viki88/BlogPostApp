@@ -19,4 +19,6 @@ class MainViewModel @Inject constructor(var mainRepository: MainRepository) :Vie
 
     fun updatePost(body: RequestPostBody, id: Int) = mainRepository.updatePost(body, id)
 
+    fun errorResponse() = mainRepository.errorResponse()
+
 }

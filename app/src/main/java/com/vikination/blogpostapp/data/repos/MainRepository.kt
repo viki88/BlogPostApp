@@ -10,4 +10,5 @@ interface MainRepository{
     fun createPost(body: RequestPostBody) :LiveData<Post>
     fun updatePost(body: RequestPostBody, id: Int) :LiveData<Post>
     fun getPost(id: Int) :LiveData<Post>
+    fun errorResponse() :LiveData<String>
 }

@@ -1,5 +1,6 @@
 package com.vikination.blogpostapp.presentation.ui.main
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -14,6 +15,7 @@ import com.vikination.blogpostapp.databinding.ActivityMainBinding
 import com.vikination.blogpostapp.presentation.ui.adapter.ListPostAdapter
 import com.vikination.blogpostapp.presentation.ui.listener.OnClickMenuListListener
 import com.vikination.blogpostapp.presentation.ui.newpost.CreateEditPostDialogFragment
+import com.vikination.blogpostapp.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -37,6 +39,10 @@ class MainActivity : AppCompatActivity(),
         binding.btnAddpost.setOnClickListener { showCreatePostDialog() }
 
         binding.swipeLayout.setOnRefreshListener { loadAllPost() }
+
+        viewModel.errorResponse().observe(this){
+            Toast.makeText(this, "Error Response : $it", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onResume() {
@@ -45,21 +51,25 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun loadAllPost(){
-        showLoadingBar(true)
-        viewModel.getAllPost().observe(this){
-            Log.i("TAG", "onCreate: ${Gson().toJson(it)}")
-            adapter.submitList(it)
-            showLoadingBar(false)
+        if (isInternetConnectionAvailable(this)){
+            showLoadingBar(true)
+            viewModel.getAllPost().observe(this){
+                Log.i("TAG", "onCreate: ${Gson().toJson(it)}")
+                adapter.submitList(it)
+                showLoadingBar(false)
+            }
         }
     }
 
     private fun deletePost(post: Post){
-        showLoadingBar(true)
-        val body = RequestPostBody(post.title, post.content)
-        viewModel.deletePost(body, post.id).observe(this){
-            Toast.makeText(this@MainActivity, "Delete \"${it.title}\" Success", Toast.LENGTH_SHORT).show()
-            showLoadingBar(false)
-            loadAllPost()
+        if (isInternetConnectionAvailable(this)){
+            showLoadingBar(true)
+            val body = RequestPostBody(post.title, post.content)
+            viewModel.deletePost(body, post.id).observe(this){
+                Toast.makeText(this@MainActivity, "Delete \"${it.title}\" Success", Toast.LENGTH_SHORT).show()
+                showLoadingBar(false)
+                loadAllPost()
+            }
         }
     }
 
@@ -116,19 +126,29 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun createNewPost(requestPostBody: RequestPostBody){
-        showLoadingBar(true)
-        viewModel.createPost(requestPostBody).observe(this){
-            Toast.makeText(this@MainActivity, "Create \"${it.title}\" Success", Toast.LENGTH_SHORT).show()
-            loadAllPost()
+        if (isInternetConnectionAvailable(this)){
+            showLoadingBar(true)
+            viewModel.createPost(requestPostBody).observe(this){
+                Toast.makeText(this@MainActivity, "Create \"${it.title}\" Success", Toast.LENGTH_SHORT).show()
+                loadAllPost()
+            }
         }
     }
 
     private fun editPost(requestPostBody: RequestPostBody, id: Int){
-        showLoadingBar(true)
-        viewModel.updatePost(requestPostBody, id).observe(this){
-            Toast.makeText(this@MainActivity, "Update \"${it.title}\" Success", Toast.LENGTH_SHORT).show()
-            loadAllPost()
+        if (isInternetConnectionAvailable(this)){
+            showLoadingBar(true)
+            viewModel.updatePost(requestPostBody, id).observe(this){
+                Toast.makeText(this@MainActivity, "Update \"${it.title}\" Success", Toast.LENGTH_SHORT).show()
+                loadAllPost()
+            }
         }
+    }
+
+    private fun isInternetConnectionAvailable(context: Context) :Boolean{
+        val isAvailable = Utils.isNetworkConnected(context)
+        if (!isAvailable) Toast.makeText(this, "Problem with your connection, Please Try Again", Toast.LENGTH_SHORT).show()
+        return isAvailable
     }
 
 }
