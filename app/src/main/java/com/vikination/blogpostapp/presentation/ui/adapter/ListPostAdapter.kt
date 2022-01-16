@@ -28,6 +28,11 @@ class ListPostAdapter(var onClickMenuListListener: OnClickMenuListListener) : Li
                 closeItemMenu()
                 onClickMenuListListener.onDeleteClicked(post)
             }
+
+            binding.itemContentLayout.setOnClickListener {
+                onClickMenuListListener.onClickItemListener(post)
+            }
+
         }
 
         private fun closeItemMenu(){

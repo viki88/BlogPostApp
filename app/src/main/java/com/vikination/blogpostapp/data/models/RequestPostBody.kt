@@ -1,3 +1,7 @@
 package com.vikination.blogpostapp.data.models
 
-data class RequestPostBody(var title :String, var content :String)
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+data class RequestPostBody(var title :String, var content :String) :Parcelable

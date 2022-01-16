@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/item_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,6 +9,7 @@
     android:padding="4dp">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardview_layout"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -50,6 +52,7 @@
                 </FrameLayout>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/item_content_layout"
                 android:padding="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -1,9 +1,12 @@
 package com.vikination.blogpostapp.presentation.ui.main
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +16,7 @@ import com.vikination.blogpostapp.data.models.RequestPostBody
 import com.vikination.blogpostapp.data.models.Post
 import com.vikination.blogpostapp.databinding.ActivityMainBinding
 import com.vikination.blogpostapp.presentation.ui.adapter.ListPostAdapter
+import com.vikination.blogpostapp.presentation.ui.detailpost.DetailPostActivity
 import com.vikination.blogpostapp.presentation.ui.listener.OnClickMenuListListener
 import com.vikination.blogpostapp.presentation.ui.newpost.CreateEditPostDialogFragment
 import com.vikination.blogpostapp.utils.Utils
@@ -97,12 +101,17 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onEditClicked(post: Post) {
-//        Toast.makeText(this, "edit ${post.title}", Toast.LENGTH_SHORT).show()
         showEditPostDialog(post)
     }
 
     override fun onDeleteClicked(post: Post) {
         showDeleteDialog(post)
+    }
+
+    override fun onClickItemListener(post: Post) {
+        val intent = Intent(this, DetailPostActivity::class.java)
+        intent.putExtra(DetailPostActivity.ID_POST, post.id)
+        detailActivityLauncher.launch(intent)
     }
 
     private fun showDeleteDialog(post: Post){
@@ -149,6 +158,16 @@ class MainActivity : AppCompatActivity(),
         val isAvailable = Utils.isNetworkConnected(context)
         if (!isAvailable) Toast.makeText(this, "Problem with your connection, Please Try Again", Toast.LENGTH_SHORT).show()
         return isAvailable
+    }
+
+    private val detailActivityLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()) {
+        when (it.resultCode) {
+            DetailPostActivity.DELETE_RESULT -> {
+                it.data?.getParcelableExtra<Post>(DetailPostActivity.POST_KEY)?.
+                    let { postData -> deletePost(postData)}
+            }
+        }
     }
 
 }

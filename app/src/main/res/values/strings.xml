@@ -9,4 +9,6 @@
     <!-- Create Post Dialog-->
     <string name="error_empty_input_title_message">Title must be filled.</string>
     <string name="error_empty_input_content_message">Content must be filled.</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>

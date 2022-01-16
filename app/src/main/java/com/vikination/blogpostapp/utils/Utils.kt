@@ -14,7 +14,7 @@ object Utils {
 
     fun getStringFromHtml(textView: TextView, htmlString :String) {
         textView.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-             Html.fromHtml(htmlString, Html.FROM_HTML_MODE_COMPACT)
+             Html.fromHtml(htmlString, Html.FROM_HTML_MODE_LEGACY)
         }else Html.fromHtml(htmlString)
     }
 
