@@ -11,4 +11,8 @@
     <string name="error_empty_input_content_message">Content must be filled.</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+
+    <!-- Detail Post String -->
+    <string name="published_at">published at : %s</string>
+    <string name="updated_at">updated at : %s</string>
 </resources>

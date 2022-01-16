@@ -18,6 +18,7 @@ class ListPostAdapter(var onClickMenuListListener: OnClickMenuListListener) : Li
         fun bind(post: Post){
             binding.titlePost.text = post.title
             Utils.getStringFromHtml(binding.contentPost, post.content)
+            binding.publishedDate.text = Utils.getDateString(post.published_at)
 
             binding.editLayout.setOnClickListener {
                 closeItemMenu()

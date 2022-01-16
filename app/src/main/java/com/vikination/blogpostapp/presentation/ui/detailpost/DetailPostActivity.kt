@@ -68,6 +68,8 @@ class DetailPostActivity : AppCompatActivity() {
             post = it
             supportActionBar?.title = it.title
             binding.titleDetail.text = it.title
+            binding.publishedDate.text = String.format(resources.getString(R.string.published_at), Utils.getDateString(it.published_at))
+            binding.updateDate.text = String.format(resources.getString(R.string.updated_at), Utils.getDateString(it.updated_at))
             Utils.getStringFromHtml(binding.contentDetail, it.content)
             showLoadingBar(false)
         }

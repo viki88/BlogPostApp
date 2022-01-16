@@ -21,7 +21,7 @@
         <com.chauthai.swipereveallayout.SwipeRevealLayout
             android:id="@+id/layout_swipe_reveal"
             android:layout_width="match_parent"
-            android:layout_height="85dp"
+            android:layout_height="110dp"
             app:mode="same_level"
             app:dragEdge="right">
             <LinearLayout
@@ -30,8 +30,8 @@
                 android:orientation="horizontal">
                 <FrameLayout
                     android:id="@+id/edit_layout"
-                    android:layout_width="85dp"
-                    android:layout_height="85dp"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
                     android:background="@color/yellow">
                     <ImageView
                         android:layout_width="32dp"
@@ -41,8 +41,8 @@
                 </FrameLayout>
                 <FrameLayout
                     android:id="@+id/delete_layout"
-                    android:layout_width="85dp"
-                    android:layout_height="85dp"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
                     android:background="@color/red">
                     <ImageView
                         android:layout_width="32dp"
@@ -73,8 +73,15 @@
                     android:textSize="12sp"
                     android:layout_marginTop="4dp"
                     android:lines="2"
-                    android:ellipsize="end"
-                    />
+                    android:ellipsize="end" />
+                <TextView
+                    android:id="@+id/published_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10sp"
+                    android:layout_marginTop="8dp"
+                    android:textStyle="italic"
+                    tools:text="12 January 2021 - 19:20"/>
             </LinearLayout>
         </com.chauthai.swipereveallayout.SwipeRevealLayout>
 

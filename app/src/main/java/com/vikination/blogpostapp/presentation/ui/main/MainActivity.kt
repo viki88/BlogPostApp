@@ -5,15 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
-import com.vikination.blogpostapp.data.models.RequestPostBody
 import com.vikination.blogpostapp.data.models.Post
+import com.vikination.blogpostapp.data.models.RequestPostBody
 import com.vikination.blogpostapp.databinding.ActivityMainBinding
 import com.vikination.blogpostapp.presentation.ui.adapter.ListPostAdapter
 import com.vikination.blogpostapp.presentation.ui.detailpost.DetailPostActivity
